@@ -10,10 +10,10 @@ function love.load()
     player.grid = anim8.newGrid(100, 100, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
 
     player.animations = {}
-    player.animations.down = anim8.newAnimation(player.grid('1-8', 1), 0.2)
-    player.animations.up = anim8.newAnimation(player.grid('1-8', 2), 0.2)
-    player.animations.right = anim8.newAnimation(player.grid('1-8', 3), 0.2)
-    player.animations.left = anim8.newAnimation(player.grid('1-8', 4), 0.2)
+    player.animations.down = anim8.newAnimation(player.grid('1-7', 1), 0.12)
+    player.animations.up = anim8.newAnimation(player.grid('1-7', 2), 0.12)
+    player.animations.right = anim8.newAnimation(player.grid('1-7', 3), 0.12)
+    player.animations.left = anim8.newAnimation(player.grid('1-7', 4), 0.12)
 
     player.anim = player.animations.left
 
@@ -24,31 +24,43 @@ function love.load()
 end
 
 function love.update(dt)
+    local isMoving = false
+
     if love.keyboard.isDown("down") then
         player.y = player.y + player.speed
+        player.anim = player.animations.down
+        isMoving = true
     end
     
     if love.keyboard.isDown("up") then
         player.y = player.y - player.speed
+        player.anim = player.animations.up
+        isMoving = true
     end
     
     if love.keyboard.isDown("right") then
         player.x = player.x + player.speed
+        player.anim = player.animations.right
+        isMoving = true
     end
     
     if love.keyboard.isDown("left") then
         player.x = player.x - player.speed
+        player.anim = player.animations.left
+        isMoving = true
     end
 
-    player.animations.down: update(dt)
-    player.animations.up: update(dt)
-    player.animations.right: update(dt)
-    player.animations.left: update(dt)
+    if isMoving == false then
+        player.anim:gotoFrame(1)
+    end
+
+    player.anim:update(dt)
+
 
 
 end
 
 function love.draw()
     love.graphics.draw(background, 0, 0, 0, 0.8, 0.8)
-    player.animations.down:draw(player.spriteSheet, player.x, player.y, nil, 1)
+    player.anim:draw(player.spriteSheet, player.x, player.y, nil, 1)
 end
